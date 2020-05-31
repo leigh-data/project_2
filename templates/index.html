@@ -6,8 +6,40 @@
     <title>Document</title>
 </head>
 <body>
+    <div id="flash"></div>
+    <!-- Error Template -->
+    <script id="error-template" type="text/x-handlebars-template">
+        <div class="content">
+            {{title}}
+        <div class="sub header">{{message}}</div>
+    </script>
+    <!-- Registration Template-->
+    <script id="registration-template" type="text/x-handlebars-template">
+        <h1>Registration</h1>
+        <form id="registration-form">
+            <input type="text" name="username" id="username">
+            <button>Register</button>
+        </form>
+    </script>
+    <!-- Chat Template-->
+    <script id="chat-template" type="text/x-handlebars-template">
+        <h1>chat</h1>
+        <h2 id="username"></h2>
+        <form id="chat-message-form">
+            <input type="text" name="msg">
+            <button>Send</button>
+        </form>
+        <form id="create-channel-form">
+            <input type="text" name="channel">
+            <button>Create Channel</button>
+        </form>
+    </script>
+
+    <div id="app"></div>
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script src="{{ url_for('static', filename='js/lib/vanilla-router.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
 </html>

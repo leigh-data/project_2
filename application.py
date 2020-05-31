@@ -8,6 +8,9 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
 
+USERS = []
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -16,7 +19,9 @@ def index():
 @socketio.on("registration_request")
 def registration_request(data):
     print(data)
-    if data['name'] == 'stinky':
-        emit('registration_success')
+    if data['username'] not in USERS:
+        USERS.append(data['username'])
+        emit('registration_success', {'username': data['username']})
+        emit('flash', "user registered.")
     else:
-        emit('flash', "Unable to register")
+        emit('flash', "User already registered.")
