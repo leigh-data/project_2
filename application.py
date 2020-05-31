@@ -21,7 +21,8 @@ def registration_request(data):
     print(data)
     if data['username'] not in USERS:
         USERS.append(data['username'])
-        emit('registration_success', {'username': data['username']})
-        emit('flash', "user registered.")
+        emit('registration_success', {
+             'username': data['username']}, room=request.sid)
+        emit('flash', "user registered."room=request.sid)
     else:
-        emit('flash', "User already registered.")
+        emit('flash', "User already registered."room=request.sid)
