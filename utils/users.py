@@ -4,7 +4,7 @@ USERS = []
 def register(username):
     user = {
         'username': username,
-        'room': 'atrium',
+        'channel': 'atrium',
         'session_id': None
     }
 
@@ -32,6 +32,10 @@ def join_channel_data(session_id, channel):
         user = USERS[index]
         user['channel'] = channel
         return user
+
+
+def get_channel_users(channel):
+    return [user for user in USERS if user['channel'] == channel]
 
 
 def diconnect_user(session_id):

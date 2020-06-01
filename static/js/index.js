@@ -59,13 +59,19 @@ window.addEventListener("DOMContentLoaded", (event) => {
       const chatMessageForm = document.getElementById("chat-message-form");
       const createChannelForm = document.getElementById("create-channel-form");
       const usernameBoard = document.getElementById("username");
+      const usersBoard = document.querySelector(".users");
+      const chatMessages = document.querySelector(".messages");
       const username = localStorage.getItem("username");
 
       usernameBoard.innerHTML = username;
       // todo join channel
-      console.log(session_id);
+      console.log(session_id, "HAHAHAHAH!!!!!");
       socket.emit("join_channel", { channel, session_id });
-
+      socket.emit("push_message", {
+        channel,
+        msg: `${username} has joined channel`,
+        username: "Mr. Roboto",
+      });
       console.log(channel);
 
       chatMessageForm.onsubmit = (e) => {
@@ -76,6 +82,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
         if (msg.length > 3) {
           // push the message
           socket.emit("push_message", { channel, msg, username });
+          e.target.elements.msg.value = "";
+          e.target.elements.msg.focus();
         }
       };
 
@@ -89,7 +97,24 @@ window.addEventListener("DOMContentLoaded", (event) => {
       };
 
       socket.on("refresh_messages", (data) => {
-        console.log(data);
+        const messages = data["messages"];
+        chatMessages.innerHTML = "";
+
+        messages.map((message) => {
+          const div = document.createElement("div");
+          div.classList.add("message");
+          div.innerHTML = `
+          <p class="meta">${message.username} <span>${message.time}</span><p>
+            <p class="text">
+            ${message.text}
+           </p>`;
+          chatMessages.appendChild(div);
+        });
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      });
+
+      socket.on("refresh_users", (data) => {
+        console.log(data.users);
       });
     });
 

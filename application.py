@@ -3,7 +3,7 @@ import os
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, send, join_room
 
-from utils.users import USERS, register, login, diconnect_user, join_channel_data
+from utils.users import USERS, register, login, diconnect_user, join_channel_data, get_channel_users
 from utils.message import format_message
 from utils.rooms import get_messages, add_message
 
@@ -45,12 +45,13 @@ def login_request(data):
 
 @socketio.on("join_channel")
 def join_channel(data):
-    print("JOIN CHANNEL")
     user = join_channel_data(data['session_id'], data['channel'])
-    print(user)
     join_room(data['channel'])
-    emit(
-        'flash', f"{user['username']} has joined the channel", room=data['channel'])
+    users = get_channel_users(data['channel'])
+    channel_messages = get_messages(data['channel'])
+    emit("refresh_users", {'users': users}, room=data['channel'])
+    emit("refresh_messages", {
+         'messages': channel_messages}, room=data['channel'])
 
 
 @socketio.on("push_message")
