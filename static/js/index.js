@@ -64,7 +64,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
       const username = localStorage.getItem("username");
 
       usernameBoard.innerHTML = username;
-      // todo join channel
       socket.emit("join_channel", { channel, session_id });
 
       console.log(channel);
@@ -110,6 +109,10 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
       socket.on("refresh_users", (data) => {
         console.log(data.users);
+      });
+
+      socket.on("refresh_rooms", (data) => {
+        console.log(data);
       });
     });
 

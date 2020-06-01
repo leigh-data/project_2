@@ -74,6 +74,4 @@ def disconnect():
     user = diconnect_user(sid)
 
     if user:
-        print(user)
-        print(f"HASTA LA VISTA, {sid}")
         emit('flash', f"{user['username']} has left the room.", room=user['channel'])
