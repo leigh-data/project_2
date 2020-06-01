@@ -3,7 +3,7 @@ import os
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, send, join_room
 
-from utils.users import USERS, register, login, diconnect_user, join_channel_data, get_channel_users
+from utils.users import USERS, register, login, diconnect_user, join_channel_data, get_channel_users, user_exists
 from utils.message import format_message
 from utils.rooms import get_messages, add_message
 
@@ -25,13 +25,14 @@ def connect():
 @socketio.on("registration_request")
 def registration_request(data):
     print(data)
-    if data['username'] not in USERS:
+    if user_exists(data['username']):
+        emit('flash', "User already registered.")
+    else:
         register(data['username'])
         emit('registration_success', {
              'username': data['username']})
         emit('flash', "user registered.")
-    else:
-        emit('flash', "User already registered.")
+        
 
 
 @socketio.on("login_request")
@@ -47,6 +48,7 @@ def login_request(data):
 def join_channel(data):
     user = join_channel_data(data['session_id'], data['channel'])
     join_room(data['channel'])
+    emit('flash', user['username'] + ' has entered the room.', room=data['channel'])
     users = get_channel_users(data['channel'])
     channel_messages = get_messages(data['channel'])
     emit("refresh_users", {'users': users}, room=data['channel'])
@@ -73,4 +75,5 @@ def disconnect():
 
     if user:
         print(user)
-    print(f"HASTA LA VISTA, {sid}")
+        print(f"HASTA LA VISTA, {sid}")
+        emit('flash', f"{user['username']} has left the room.", room=user['channel'])

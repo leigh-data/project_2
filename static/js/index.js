@@ -65,13 +65,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
       usernameBoard.innerHTML = username;
       // todo join channel
-      console.log(session_id, "HAHAHAHAH!!!!!");
       socket.emit("join_channel", { channel, session_id });
-      socket.emit("push_message", {
-        channel,
-        msg: `${username} has joined channel`,
-        username: "Mr. Roboto",
-      });
+
       console.log(channel);
 
       chatMessageForm.onsubmit = (e) => {
@@ -145,6 +140,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
     /* Flash message handler. Available to all templates. */
     socket.on("flash", (msg) => {
       flash.innerHTML = msg;
+      setTimeout(() => {
+        flash.innerHTML = "";
+      }, 5000);
     });
 
     router.addUriListener();
