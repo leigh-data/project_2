@@ -27,8 +27,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
 
     router.add("", function () {
-      socket.emit("request_session_id");
-
       const username = localStorage.getItem("username");
       const session_id = socket.id;
       console.log("SESSION ID", session_id);
@@ -51,7 +49,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
       });
     });
 
-    router.add("chat/(:word)", (channel) => {
+    router.add("chat/(:any)", (channel) => {
       let html = chatTemplate();
       el.innerHTML = html;
       session_id = socket.id;
@@ -59,14 +57,13 @@ window.addEventListener("DOMContentLoaded", (event) => {
       const chatMessageForm = document.getElementById("chat-message-form");
       const createChannelForm = document.getElementById("create-channel-form");
       const usernameBoard = document.getElementById("username");
-      const usersBoard = document.querySelector(".users");
+      const usersBoard = document.querySelector(".users > ul");
+      const channelsBoard = document.querySelector(".channels > ul");
       const chatMessages = document.querySelector(".messages");
       const username = localStorage.getItem("username");
 
       usernameBoard.innerHTML = username;
       socket.emit("join_channel", { channel, session_id });
-
-      console.log(channel);
 
       chatMessageForm.onsubmit = (e) => {
         e.preventDefault();
@@ -86,7 +83,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
         const channel = e.target.channel.value;
         if (channel) {
-          alert(`The channel is ${channel}`);
+          socket.emit("channel_request", { channel });
         }
       };
 
@@ -108,11 +105,31 @@ window.addEventListener("DOMContentLoaded", (event) => {
       });
 
       socket.on("refresh_users", (data) => {
-        console.log(data.users);
+        console.log(data);
+        const users = data["users"];
+        usersBoard.innerHTML = "";
+
+        users.map((user) => {
+          const li = document.createElement("li");
+          li.innerHTML = `${user.username}`;
+          usersBoard.appendChild(li);
+        });
       });
 
-      socket.on("refresh_rooms", (data) => {
+      socket.on("refresh_channels", (data) => {
         console.log(data);
+        const channels = data["channels"];
+        channelsBoard.innerHTML = "";
+
+        channels.map((next_channel) => {
+          const li = document.createElement("li");
+          li.innerHTML = `${next_channel}`;
+          li.onclick = () => {
+            socket.emit("leave_channel", { channel });
+            router.navigateTo(`chat/${next_channel}`);
+          };
+          channelsBoard.appendChild(li);
+        });
       });
     });
 

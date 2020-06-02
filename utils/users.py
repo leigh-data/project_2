@@ -48,5 +48,6 @@ def diconnect_user(session_id):
         user['session_id'] = None
         return user
 
+
 def user_exists(username):
     return len([user for user in USERS if user['username'] == username]) != 0
