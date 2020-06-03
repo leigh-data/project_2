@@ -3,6 +3,7 @@ from collections import deque
 
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
+from engineio.payload import Payload
 
 from utils.users import USERS, register, login, diconnect_user, join_channel_data, get_channel_users, user_exists
 from utils.message import format_message
@@ -10,6 +11,7 @@ from utils.rooms import CHANNELS, get_messages, add_message
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+Payload.max_decode_packets = 150
 socketio = SocketIO(app)
 
 
@@ -36,8 +38,10 @@ def registration_request(data):
 
 @socketio.on("login_request")
 def login_request(data):
-    if login(data['username'], request.sid):
-        emit('login_success', {'username': data['username']}, room=request.sid)
+    user = login(data['username'], request.sid)
+    if user:
+        emit('login_success', {
+             'username': user['username'], 'channel': user['channel']}, room=request.sid)
     else:
         emit('flash', 'User not found. Please register.', room=request.sid)
         emit('login_fail', room=request.sid)
@@ -58,21 +62,26 @@ def channel_request(data):
 
 @socketio.on("join_channel")
 def join_channel(data):
-    user = join_channel_data(data['session_id'], data['channel'])
+    user = join_channel_data(request.sid, data['channel'])
+    print("USER:", user)
     join_room(data['channel'])
     emit('flash', user['username'] +
          ' has entered the room.', room=data['channel'])
     users = get_channel_users(data['channel'])
     channel_messages = get_messages(data['channel'])
-    emit("refresh_users", {'users': users}, room=data['channel'])
     emit("refresh_messages", {
          'messages': channel_messages}, room=data['channel'])
     emit("refresh_channels", {'channels': [*CHANNELS]})
+    emit("refresh_users", {'users': users}, room=data['channel'])
 
 
 @socketio.on("leave_channel")
 def leave_channel(data):
     leave_room(data['channel'])
+    join_channel_data(request.sid, None)
+    users = get_channel_users(data['channel'])
+    emit("refresh_users", {'users': users}, room=data['channel'])
+    print(f"{request.sid} has left...")
 
 
 @socketio.on("push_message")
@@ -90,7 +99,6 @@ def push_message(data):
 def disconnect():
     sid = request.sid
     user = diconnect_user(sid)
-    print(f"{user['username']} has left the rooom.")
     if user:
         emit(
             'flash', f"{user['username']} has left the room.", room=user['channel'])

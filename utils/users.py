@@ -17,9 +17,10 @@ def login(username, session_id):
         USERS) if d["username"] == username), -1)
 
     if index != -1:
-        USERS[index]['session_id'] = session_id
-        print(USERS[index])
-        return True
+        user = USERS[index]
+        user['session_id'] = session_id
+        print("USER:", USERS[index])
+        return user
     else:
         return False
 

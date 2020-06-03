@@ -29,7 +29,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
     router.add("", function () {
       const username = localStorage.getItem("username");
       const session_id = socket.id;
-      console.log("SESSION ID", session_id);
 
       if (username) {
         socket.emit("login_request", { username });
@@ -43,9 +42,9 @@ window.addEventListener("DOMContentLoaded", (event) => {
       });
 
       socket.on("login_success", (data) => {
-        const room = "atrium";
+        const channel = data["channel"];
         console.log(data["username"]);
-        router.navigateTo(`chat/${room}`);
+        router.navigateTo(`chat/${channel}`);
       });
     });
 
@@ -84,6 +83,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
         const channel = e.target.channel.value;
         if (channel) {
           socket.emit("channel_request", { channel });
+          e.target.elements.channel.value = "";
         }
       };
 
@@ -105,7 +105,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
       });
 
       socket.on("refresh_users", (data) => {
-        console.log(data);
         const users = data["users"];
         usersBoard.innerHTML = "";
 
@@ -117,7 +116,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
       });
 
       socket.on("refresh_channels", (data) => {
-        console.log(data);
         const channels = data["channels"];
         channelsBoard.innerHTML = "";
 
