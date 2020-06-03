@@ -94,3 +94,6 @@ def disconnect():
     if user:
         emit(
             'flash', f"{user['username']} has left the room.", room=user['channel'])
+        emit('refresh_users')
+        users = get_channel_users(user['channel'])
+        emit("refresh_users", {'users': users}, room=user['channel'])

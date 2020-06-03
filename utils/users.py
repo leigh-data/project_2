@@ -35,7 +35,7 @@ def join_channel_data(session_id, channel):
 
 
 def get_channel_users(channel):
-    return [user for user in USERS if user['channel'] == channel]
+    return [user for user in USERS if user['channel'] == channel and user['session_id'] is not None]
 
 
 def diconnect_user(session_id):
