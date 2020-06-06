@@ -3,10 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>SeDaKA</title>
 </head>
 <body>
-    <div id="flash"></div>
+    <nav class="navbar navbar-dark bg-dark mb-3">
+        <span class="navbar-brand mb-0 h1">SeDaKA</span>
+    </nav>
+    <div class="container">
+        <div id="flash"></div>
+        <div id="app"></div>
+    </div>
     <!-- Error Template -->
     <script id="error-template" type="text/x-handlebars-template">
         <div class="content">
@@ -23,29 +30,35 @@
     </script>
     <!-- Chat Template-->
     <script id="chat-template" type="text/x-handlebars-template">
-        <h1>chat</h1>
-        <h2 id="username"></h2>
-        <form id="chat-message-form">
-            <input type="text" name="msg">
-            <button>Send</button>
-        </form>
-        <form id="create-channel-form">
-            <input type="text" name="channel">
-            <button>Create Channel</button>
-        </form>
-        <div class="users">
-            <h4>Users</h4>
-            <ul></ul>
-        </div>
-        <div class="messages"></div>
-        <div class="channels">
-            <h4>Channels</h4>
-            <ul></ul>
+        <div class="row">
+            <div class="row-md-3 text-center">
+                <h1 class="channel"></h1>
+                <h2 id="username"></h2>
+                <div class="card users mb-4">
+                    <div class="card-header">Users</div>
+                    <ul class="list-group list-group-flush"></ul>
+                </div>
+                <div class="card channels">
+                    <div class="card-header">Channels</div>
+                    <ul class="list-group list-group-flush"></ul>
+                    <form id="create-channel-form" class="form-inline">
+                        <input type="text" name="channel" class="form-control">
+                        <button class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row-md-9 ml-2">
+                <div class="messages"></div>
+                <form id="chat-message-form">
+                    <input type="text" name="msg">
+                    <button>Send</button>
+                </form>
+            </div>
         </div>
     </script>
-    
-    <div id="app"></div>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/lib/vanilla-router.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>

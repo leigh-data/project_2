@@ -18,6 +18,16 @@ window.addEventListener("DOMContentLoaded", (event) => {
       registrationScript.innerHTML
     );
 
+    const flash_message = (msg) => {
+      flash.innerHTML = `
+      <div class="alert alert-primary" role="alert">
+        ${msg}
+      </div>`;
+      setTimeout(() => {
+        flash.innerHTML = "";
+      }, 5000);
+    };
+
     // Router
     var router = new Router({
       mode: "history",
@@ -60,8 +70,10 @@ window.addEventListener("DOMContentLoaded", (event) => {
       const channelsBoard = document.querySelector(".channels > ul");
       const chatMessages = document.querySelector(".messages");
       const username = localStorage.getItem("username");
+      const channelName = document.querySelector(".channel");
 
       usernameBoard.innerHTML = username;
+      channelName.innerHTML = channel;
       socket.emit("join_channel", { channel, session_id });
 
       chatMessageForm.onsubmit = (e) => {
@@ -69,11 +81,16 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
         const msg = e.target.msg.value;
 
-        if (msg.length > 3) {
+        if (msg.length > 3 && msg.length < 126) {
           // push the message
           socket.emit("push_message", { channel, msg, username });
           e.target.elements.msg.value = "";
           e.target.elements.msg.focus();
+        }
+
+        // add validation alert
+        if (msg.length > 126) {
+          flash_message("The message is too long.");
         }
       };
 
@@ -110,7 +127,13 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
         users.map((user) => {
           const li = document.createElement("li");
+          li.classList.add("list-group-item");
           li.innerHTML = `${user.username}`;
+
+          if (user.username === username) {
+            li.classList.add("font-weight-bold");
+          }
+
           usersBoard.appendChild(li);
         });
       });
@@ -121,11 +144,17 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
         channels.map((next_channel) => {
           const li = document.createElement("li");
+          li.classList.add("list-group-item");
           li.innerHTML = `${next_channel}`;
-          li.onclick = () => {
-            socket.emit("leave_channel", { channel });
-            router.navigateTo(`chat/${next_channel}`);
-          };
+          if (next_channel !== channel) {
+            li.onclick = () => {
+              socket.emit("leave_channel", { channel });
+              router.navigateTo(`chat/${next_channel}`);
+            };
+          } else {
+            li.classList.add("font-weight-bold");
+          }
+
           channelsBoard.appendChild(li);
         });
       });
@@ -156,12 +185,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
 
     /* Flash message handler. Available to all templates. */
-    socket.on("flash", (msg) => {
-      flash.innerHTML = msg;
-      setTimeout(() => {
-        flash.innerHTML = "";
-      }, 5000);
-    });
+    socket.on("flash", flash_message);
 
     router.addUriListener();
     router.navigateTo("");

@@ -1,7 +1,7 @@
 import os
 from collections import deque
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
 from engineio.payload import Payload
 
@@ -13,6 +13,12 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 Payload.max_decode_packets = 150
 socketio = SocketIO(app)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """404 gets sent to home page. SPA client JS handles urls."""
+    return redirect(url_for("index"))
 
 
 @app.route("/")
@@ -63,10 +69,9 @@ def channel_request(data):
 @socketio.on("join_channel")
 def join_channel(data):
     user = join_channel_data(request.sid, data['channel'])
-    print("USER:", user)
     join_room(data['channel'])
-    emit('flash', user['username'] +
-         ' has entered the room.', room=data['channel'])
+    emit('flash', f"{user['username']} has entered the room.",
+         room=data['channel'])
     users = get_channel_users(data['channel'])
     channel_messages = get_messages(data['channel'])
     emit("refresh_messages", {
