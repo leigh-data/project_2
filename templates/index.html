@@ -8,7 +8,7 @@
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark">
-        <a class="navbar-brand mb-0 h1" href="{{ url_for("index") }}">SeDaKA</a>
+        <a class="navbar-brand mb-0 h1" href="#chat-message">SeDaKA</a>
     </nav>
     <div class="flash"></div>
     <div class="container mt-2 mb-2 h-100">
@@ -36,7 +36,6 @@
     </script>
     <!-- Chat template -->
     <script id="chat-template" type="text/x-handlebars-template">
-        <!-- Modal Convogram Form -->
         <div class="row h-100">
             <div class="col-md-4 text-center">
                 <div class="card users mb-4">
@@ -60,23 +59,14 @@
                 <div class="messages"></div>
                 <form class="chat-message-form m-3 align-items-center">
                     <div class="form-group">
-                        <input type="text" name="msg" class="form-control message">
+                        <input type="text" name="msg" class="form-control message" id="chat-message">
                     </div>
                     <div class="form-group">
                         <button class="btn btn-primary float-right">Send</button>
                     </div>
                 </form>
             </div>
-        </div>
-        <!--  MODAL -->
-        <div class="modal-container" id="modal">
-            <div class="modal">
-                <button class="close-btn" id="close">
-                    <i class="fa fa-times"></i>
-                </button>
-                <p>Hhahahahaha!11</p>
-            </div>
-        </div>
+        </div>        
     </script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/lib/vanilla-router.min.js') }}"></script>
