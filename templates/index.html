@@ -11,7 +11,7 @@
         <a class="navbar-brand mb-0 h1" href="{{ url_for("index") }}">SeDaKA</a>
     </nav>
     <div class="flash"></div>
-    <div class="container mt-2 mb-2">
+    <div class="container mt-2 mb-2 h-100">
         <div id="app"></div>
     </div>
     <!-- Error Template -->
@@ -36,7 +36,8 @@
     </script>
     <!-- Chat template -->
     <script id="chat-template" type="text/x-handlebars-template">
-        <div class="row">
+        <!-- Modal Convogram Form -->
+        <div class="row h-100">
             <div class="col-md-4 text-center">
                 <div class="card users mb-4">
                     <div class="card-header">Users</div>
@@ -57,7 +58,7 @@
             </div>
             <div class="col-md-8">
                 <div class="messages"></div>
-                <form class="chat-message-form mt-3">
+                <form class="chat-message-form m-3 align-items-center">
                     <div class="form-group">
                         <input type="text" name="msg" class="form-control message">
                     </div>
@@ -67,10 +68,16 @@
                 </form>
             </div>
         </div>
+        <!--  MODAL -->
+        <div class="modal-container" id="modal">
+            <div class="modal">
+                <button class="close-btn" id="close">
+                    <i class="fa fa-times"></i>
+                </button>
+                <p>Hhahahahaha!11</p>
+            </div>
+        </div>
     </script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/lib/vanilla-router.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>

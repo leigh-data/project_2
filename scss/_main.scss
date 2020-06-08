@@ -1,16 +1,20 @@
+html,
+body {
+  height: 100%;
+}
+
+.flash {
+  min-height: 64px;
+}
+
 .messages {
-  height: 300px;
+  height: 200px;
   width: 100%;
   display: inline-block;
   overflow-y: scroll;
 }
 
 .chat-message-form {
-  width: 100%;
-
-  .form-inline {
-    &.form-control {
-      width: 100%;
-    }
-  }
+  margin: 10px;
+  align-items: center;
 }

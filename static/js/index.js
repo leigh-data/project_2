@@ -18,14 +18,14 @@ window.addEventListener("DOMContentLoaded", (event) => {
       registrationScript.innerHTML
     );
 
-    const flash_message = (msg) => {
+    const flash_message = (msg, flash_type = "success", length = 5000) => {
       flash.innerHTML = `
-      <div class="alert alert-primary" role="alert">
+      <div class="alert alert-${flash_type}" role="alert">
         ${msg}
       </div>`;
       setTimeout(() => {
         flash.innerHTML = "";
-      }, 5000);
+      }, length);
     };
 
     // Router
@@ -132,7 +132,14 @@ window.addEventListener("DOMContentLoaded", (event) => {
           } else {
             li.setAttribute("data-session-id", user["session_id"]);
             li.onclick = () => {
-              alert(`${user.username}:${li.dataset["sessionId"]}`);
+              const session_id = li.dataset["sessionId"];
+              const msg = prompt(`Convogram for ${user.username}`);
+
+              if (msg.length > 0 && msg.length < 126) {
+                socket.emit("send_convogram", { session_id, username, msg });
+              } else {
+                flash_message("The message is invalid.");
+              }
             };
           }
 
@@ -159,6 +166,12 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
           channelsBoard.appendChild(li);
         });
+      });
+
+      socket.on("receive_convogram", (data) => {
+        const msg = `Convogram from ${data.sender}: ${data.msg}`;
+        flash_message(msg, "info", 10000);
+        window.scrollTo(0, 56);
       });
     });
 

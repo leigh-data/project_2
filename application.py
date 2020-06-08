@@ -100,6 +100,18 @@ def push_message(data):
     emit('refresh_messages', {'messages': channel_messages}, room=channel)
 
 
+@socketio.on("send_convogram")
+def send_convogram(data):
+    session_id = data['session_id']
+    sender = data['username']
+    msg = data['msg']
+
+    emit("receive_convogram", {
+        'sender': sender,
+        'msg': msg
+    }, room=session_id)
+
+
 @socketio.on('disconnect')
 def disconnect():
     sid = request.sid
