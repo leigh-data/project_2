@@ -3,7 +3,7 @@ const socket = io();
 window.addEventListener("DOMContentLoaded", (event) => {
   // Important DOM elements available in all templates
   const el = document.getElementById("app");
-  const flash = document.getElementById("flash");
+  const flash = document.querySelector(".flash");
 
   socket.on("connect", function () {
     // everything after must be connected
@@ -63,17 +63,13 @@ window.addEventListener("DOMContentLoaded", (event) => {
       el.innerHTML = html;
       session_id = socket.id;
 
-      const chatMessageForm = document.getElementById("chat-message-form");
-      const createChannelForm = document.getElementById("create-channel-form");
-      const usernameBoard = document.getElementById("username");
+      const chatMessageForm = document.querySelector(".chat-message-form");
+      const createChannelForm = document.querySelector(".create-channel-form");
       const usersBoard = document.querySelector(".users > ul");
       const channelsBoard = document.querySelector(".channels > ul");
       const chatMessages = document.querySelector(".messages");
       const username = localStorage.getItem("username");
-      const channelName = document.querySelector(".channel");
 
-      usernameBoard.innerHTML = username;
-      channelName.innerHTML = channel;
       socket.emit("join_channel", { channel, session_id });
 
       chatMessageForm.onsubmit = (e) => {
@@ -84,14 +80,15 @@ window.addEventListener("DOMContentLoaded", (event) => {
         if (msg.length > 3 && msg.length < 126) {
           // push the message
           socket.emit("push_message", { channel, msg, username });
-          e.target.elements.msg.value = "";
-          e.target.elements.msg.focus();
         }
 
         // add validation alert
         if (msg.length > 126) {
           flash_message("The message is too long.");
         }
+
+        e.target.elements.msg.value = "";
+        e.target.elements.msg.focus();
       };
 
       createChannelForm.onsubmit = (e) => {
@@ -132,6 +129,11 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
           if (user.username === username) {
             li.classList.add("font-weight-bold");
+          } else {
+            li.setAttribute("data-session-id", user["session_id"]);
+            li.onclick = () => {
+              alert(`${user.username}:${li.dataset["sessionId"]}`);
+            };
           }
 
           usersBoard.appendChild(li);

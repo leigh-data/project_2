@@ -4,3 +4,13 @@
   display: inline-block;
   overflow-y: scroll;
 }
+
+.chat-message-form {
+  width: 100%;
+
+  .form-inline {
+    &.form-control {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>SeDaKA</title>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <span class="navbar-brand mb-0 h1">SeDaKA</span>
+    </nav>
+    <div class="container m-4">
+        <div class="row">
+            <div class="col">
+                <div id="flash"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="app"></div>
+        </div>
+    </div>
+    <!-- Error Template -->
+    <script id="error-template" type="text/x-handlebars-template">
+        <div class="content">
+            {{title}}
+        <div class="sub header">{{message}}</div>
+    </script>
+    <!-- Registration Template-->
+    <script id="registration-template" type="text/x-handlebars-template">
+        <h1>Registration</h1>
+        <form id="registration-form">
+            <input type="text" name="username" id="username">
+            <button>Register</button>
+        </form>
+    </script>
+    <!-- Chat Template-->
+    <script id="chat-template" type="text/x-handlebars-template">
+        <div class="col-lg-3 text-center">
+            <h1 class="channel"></h1>
+            <h2 id="username"></h2>
+            <div class="card users mb-4">
+                <div class="card-header">Users</div>
+                <ul class="list-group list-group-flush"></ul>
+            </div>
+            <div class="card channels">
+                <div class="card-header">Channels</div>
+                <ul class="list-group list-group-flush"></ul>
+            </div>
+            <form id="create-channel-form" class="form-inline mt-3">
+                <input type="text" name="channel" class="form-control" placeholder="add new channel">
+                <button class="btn btn-primary">+</button>
+            </form>
+        </div>
+        <div class="col-lg-9 ml-2">
+            <div class="messages"></div>
+            <form id="chat-message-form form-inline">
+                <input type="text" name="msg">
+                <button>Send</button>
+            </form>
+        </div>
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/lib/vanilla-router.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+</html>

@@ -1,7 +1,9 @@
 from collections import deque
 from utils.message import format_message
 
-CHANNELS = {'atrium': deque([], maxlen=10)}
+MAX_MESSAGES = 10
+
+CHANNELS = {'atrium': deque([], maxlen=MAX_MESSAGES)}
 
 
 def get_messages(channel):

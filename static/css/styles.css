@@ -11687,3 +11687,8 @@ readers do not read off random characters that represent icons */
   width: 100%;
   display: inline-block;
   overflow-y: scroll; }
+
+.chat-message-form {
+  width: 100%; }
+  .chat-message-form .form-inline.form-control {
+    width: 100%; }

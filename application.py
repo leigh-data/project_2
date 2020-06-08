@@ -7,7 +7,7 @@ from engineio.payload import Payload
 
 from utils.users import USERS, register, login, diconnect_user, join_channel_data, get_channel_users, user_exists
 from utils.message import format_message
-from utils.rooms import CHANNELS, get_messages, add_message
+from utils.rooms import CHANNELS, get_messages, add_message, MAX_MESSAGES
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -58,9 +58,9 @@ def channel_request(data):
     requested_channel = data['channel']
 
     if requested_channel not in CHANNELS:
-        CHANNELS[requested_channel] = deque([], maxlen=10)
-        emit('refresh_channels', {'channels': [*CHANNELS]})
-        emit('flash', f"{requested_channel} channel created.")
+        CHANNELS[requested_channel] = deque([], maxlen=MAX_MESSAGES)
+        emit('refresh_channels', {'channels': [*CHANNELS]}, broadcast=True)
+        emit('flash', f"{requested_channel} channel created.", broadcast=True)
         print(CHANNELS)
     else:
         emit('flash', "Could not create channel")
