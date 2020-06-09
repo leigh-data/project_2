@@ -1,5 +1,6 @@
 import os
 from collections import deque
+import stringcase
 
 from flask import Flask, render_template, request, redirect, url_for
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
@@ -55,7 +56,7 @@ def login_request(data):
 
 @socketio.on("channel_request")
 def channel_request(data):
-    requested_channel = data['channel']
+    requested_channel = stringcase.snakecase(data['channel'])
 
     if requested_channel not in CHANNELS:
         CHANNELS[requested_channel] = deque([], maxlen=MAX_MESSAGES)

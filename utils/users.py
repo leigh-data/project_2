@@ -1,7 +1,10 @@
+import stringcase
+
 USERS = []
 
 
 def register(username):
+    username = stringcase.snakecase(username)
     user = {
         'username': username,
         'channel': 'atrium',
