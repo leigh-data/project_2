@@ -14,8 +14,6 @@ def get_messages(channel):
 
 
 def add_message(channel, username, message):
-    print(CHANNELS[channel])
     if CHANNELS[channel] is not None:
         msg = format_message(username, message)
-        print(msg)
         CHANNELS[channel].append(msg)

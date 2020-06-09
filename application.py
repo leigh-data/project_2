@@ -7,7 +7,7 @@ from engineio.payload import Payload
 
 from utils.users import USERS, register, login, diconnect_user, join_channel_data, get_channel_users, user_exists
 from utils.message import format_message
-from utils.rooms import CHANNELS, get_messages, add_message, MAX_MESSAGES
+from utils.channels import CHANNELS, get_messages, add_message, MAX_MESSAGES
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")

@@ -19,7 +19,6 @@ def login(username, session_id):
     if index != -1:
         user = USERS[index]
         user['session_id'] = session_id
-        print("USER:", USERS[index])
         return user
     else:
         return False
