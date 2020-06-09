@@ -14,6 +14,14 @@ body {
   overflow-y: scroll;
 }
 
+.meta {
+  font-weight: bold;
+
+  span {
+    font-style: italic;
+  }
+}
+
 .chat-message-form {
   margin: 10px;
   align-items: center;

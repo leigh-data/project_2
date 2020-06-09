@@ -1,7 +1,7 @@
 from collections import deque
 from utils.message import format_message
 
-MAX_MESSAGES = 10
+MAX_MESSAGES = 100
 
 CHANNELS = {'atrium': deque([], maxlen=MAX_MESSAGES)}
 

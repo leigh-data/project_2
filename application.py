@@ -61,7 +61,6 @@ def channel_request(data):
         CHANNELS[requested_channel] = deque([], maxlen=MAX_MESSAGES)
         emit('refresh_channels', {'channels': [*CHANNELS]}, broadcast=True)
         emit('flash', f"{requested_channel} channel created.", broadcast=True)
-        print(CHANNELS)
     else:
         emit('flash', "Could not create channel")
 
@@ -86,7 +85,6 @@ def leave_channel(data):
     join_channel_data(request.sid, None)
     users = get_channel_users(data['channel'])
     emit("refresh_users", {'users': users}, room=data['channel'])
-    print(f"{request.sid} has left...")
 
 
 @socketio.on("push_message")

@@ -11695,6 +11695,11 @@ body {
   display: inline-block;
   overflow-y: scroll; }
 
+.meta {
+  font-weight: bold; }
+  .meta span {
+    font-style: italic; }
+
 .chat-message-form {
   margin: 10px;
   align-items: center; }
